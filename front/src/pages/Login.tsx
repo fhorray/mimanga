@@ -1,12 +1,12 @@
 import { Header } from "@/components/globals/header";
 
-const MangasPage = () => {
+const LoginPage = () => {
   return (
     <div>
       <Header />
-      MangasPage
+      LoginPage
     </div>
   );
 };
 
-export default MangasPage;
+export default LoginPage;

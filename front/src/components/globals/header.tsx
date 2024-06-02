@@ -5,9 +5,9 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
-import { menu } from "../constants";
+import { menu } from "../../../constants";
 
-const Header = () => {
+export const Header = () => {
   return (
     <header className="bg-slate-900 text-white">
       <div className="h-[90px] max-w-7xl mx-auto flex justify-between gap-10 items-center">
@@ -22,9 +22,11 @@ const Header = () => {
             >
               {/* MENU & LOGO */}
               <div>
-                <h1 className="text-4xl mb-16 mt-8">
-                  Mi<strong>Manga</strong>
-                </h1>
+                <Link to={"/"}>
+                  <h1 className="text-4xl mb-16 mt-8">
+                    Mi<strong>Manga</strong>
+                  </h1>
+                </Link>
                 <nav>
                   {/* TODO: Improve the menu items */}
                   <ul className="flex flex-col gap-4 w-full">
@@ -78,5 +80,3 @@ const Header = () => {
     </header>
   );
 };
-
-export default Header;

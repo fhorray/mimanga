@@ -4,6 +4,7 @@ import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import MangasPage from "./pages/Mangas.tsx";
+import LoginPage from "./pages/Login.tsx";
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
   {
     path: "/mangas",
     element: <MangasPage />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
   },
 ]);
 
