@@ -1,9 +1,9 @@
-import { Button } from "./components/ui/button";
+import Header from "./components/globals/header";
 
 function App() {
   return (
     <>
-      <Button>Test</Button>
+      <Header />
     </>
   );
 }
