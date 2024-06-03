@@ -1,11 +1,11 @@
-import express from "express";
+import express from 'express';
+import { router as mangasRouter } from './routes/Mangas';
+import 'dotenv/config';
 
 const app = express();
+app.use(express.json());
+app.use(mangasRouter);
 
-app.get("/", (req, res) => {
-  res.send("Hello mimanga");
-});
-
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`Server is running on port ${process.env.PORT || 3000}`);
 });

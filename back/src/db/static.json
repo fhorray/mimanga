@@ -1,0 +1,137 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "title": "One Piece",
+      "author": "Eiichiro Oda",
+      "illustrator": "Eiichiro Oda",
+      "publisher": {
+        "original": "Shueisha",
+        "english": "Viz Media"
+      },
+      "demographic": "Shonen",
+      "genres": ["Adventure", "Fantasy", "Action", "Comedy"],
+      "original_run": {
+        "start": "July 22, 1997",
+        "end": null
+      },
+      "volumes": 103,
+      "chapters": 1081,
+      "synopsis": "One Piece follows the adventures of Monkey D. Luffy, a boy whose body gained the properties of rubber after unintentionally eating a Devil Fruit. With his diverse crew of pirates, named the Straw Hat Pirates, Luffy explores the Grand Line in search of the world's ultimate treasure known as 'One Piece' in order to become the next Pirate King."
+    },
+    {
+      "id": "2",
+      "title": "Naruto",
+      "author": "Masashi Kishimoto",
+      "illustrator": "Masashi Kishimoto",
+      "publisher": {
+        "original": "Shueisha",
+        "english": "Viz Media"
+      },
+      "demographic": "Shonen",
+      "genres": ["Adventure", "Fantasy", "Action", "Comedy"],
+      "original_run": {
+        "start": "September 21, 1999",
+        "end": "November 10, 2014"
+      },
+      "volumes": 72,
+      "chapters": 700,
+      "synopsis": "Naruto follows the adventures of Naruto Uzumaki, a young ninja who seeks recognition from his peers and dreams of becoming the Hokage, the leader of his village. The story is in two parts, the first set in Naruto's pre-teen years, and the second in his teens."
+    },
+    {
+      "id": "3",
+      "title": "Bleach",
+      "author": "Tite Kubo",
+      "illustrator": "Tite Kubo",
+      "publisher": {
+        "original": "Shueisha",
+        "english": "Viz Media"
+      },
+      "demographic": "Shonen",
+      "genres": ["Adventure", "Fantasy", "Action", "Comedy"],
+      "original_run": {
+        "start": "August 7, 2001",
+        "end": "August 22, 2016"
+      },
+      "volumes": 74,
+      "chapters": 686,
+      "synopsis": "Bleach follows the adventures of Ichigo Kurosaki, a teenager who can see ghosts. One day he meets Rukia Kuchiki, a Soul Reaper, who is tasked with helping souls pass on to the afterlife. During an attack by a Hollow, a malevolent lost soul, Rukia is injured and must transfer her powers to Ichigo. With his new powers, Ichigo must defend his town from the Hollows while also protecting the souls of the dead."
+    },
+    {
+      "id": "4",
+      "title": "Dragon Ball",
+      "author": "Akira Toriyama",
+      "illustrator": "Akira Toriyama",
+      "publisher": {
+        "original": "Shueisha",
+        "english": "Viz Media"
+      },
+      "demographic": "Shonen",
+      "genres": ["Adventure", "Fantasy", "Action", "Comedy"],
+      "original_run": {
+        "start": "December 3, 1984",
+        "end": "June 5, 1995"
+      },
+      "volumes": 42,
+      "chapters": 519,
+      "synopsis": "Dragon Ball follows the adventures of Son Goku from his childhood through adulthood as he trains in martial arts and explores the world in search of the seven orbs known as the Dragon Balls, which summon a wish-granting dragon when gathered. Along his journey, Goku makes several friends and battles a wide variety of villains, many of whom also seek the Dragon Balls."
+    },
+    {
+      "id": "5",
+      "title": "My Hero Academia",
+      "author": "Kohei Horikoshi",
+      "illustrator": "Kohei Horikoshi",
+      "publisher": {
+        "original": "Shueisha",
+        "english": "Viz Media"
+      },
+      "demographic": "Shonen",
+      "genres": ["Superhero", "Action", "Comedy"],
+      "original_run": {
+        "start": "July 7, 2014",
+        "end": null
+      },
+      "volumes": 34,
+      "chapters": 326,
+      "synopsis": "My Hero Academia is set in a world where people with superpowers, known as Quirks, are the norm. The story follows Izuku Midoriya, a boy born without a Quirk who dreams of becoming a hero. After being given a Quirk by the world's greatest hero, All Might, Izuku enrolls in a prestigious hero academy and begins his journey to become a true hero."
+    },
+    {
+      "id": "6",
+      "title": "Attack on Titan",
+      "author": "Hajime Isayama",
+      "illustrator": "Hajime Isayama",
+      "publisher": {
+        "original": "Kodansha",
+        "english": "Kodansha USA"
+      },
+      "demographic": "Shonen",
+      "genres": ["Dark Fantasy", "Action", "Horror"],
+      "original_run": {
+        "start": "September 9, 2009",
+        "end": "April 9, 2021"
+      },
+      "volumes": 34,
+      "chapters": 139,
+      "synopsis": "Attack on Titan is set in a world where humanity lives within enormous walled cities to protect themselves from Titans, gigantic humanoid creatures. The story follows Eren Yeager, who vows to exterminate the Titans after a Titan brings about the destruction of his hometown and the death of his mother."
+    },
+    {
+      "id": "7",
+      "title": "Death Note",
+      "author": "Tsugumi Ohba",
+      "illustrator": "Takeshi Obata",
+      "publisher": {
+        "original": "Shueisha",
+        "english": "Viz Media"
+      },
+      "demographic": "Shonen",
+      "genres": ["Mystery", "Thriller", "Psychological"],
+      "original_run": {
+        "start": "December 1, 2003",
+        "end": "May 15, 2006"
+      },
+      "volumes": 12,
+      "chapters": 108,
+      "synopsis": "Death Note follows Light Yagami, a high school student who discovers a supernatural notebook that allows him to kill anyone whose name he writes in it. Light decides to use the notebook to rid the world of criminals and establish himself as a god-like figure. However, a mysterious detective known as L is determined to stop Light's reign of terror."
+    }
+  ]
+}
