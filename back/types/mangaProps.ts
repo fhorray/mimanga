@@ -1,5 +1,5 @@
 export interface Manga {
-  id: string;
+  id: number;
   title: string;
   author: string;
   illustrator: string;
@@ -16,8 +16,4 @@ export interface Manga {
   volumes: number;
   chapters: number;
   synopsis: string;
-}
-
-export interface Mangas {
-  data: Manga[];
 }

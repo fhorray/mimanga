@@ -1,7 +1,17 @@
 import express from 'express';
-import { getAllMangas, getManga } from '../controllers/mangasControllers';
+import {
+  createManga,
+  deleteMangaById,
+  getAllMangas,
+  getMangaById,
+} from '../controllers/mangasControllers';
 
-export const router = express.Router();
+const router = express.Router();
 
 router.get('/api/v1/mangas', getAllMangas);
-router.get('/api/v1/mangas/:id', getManga);
+router.post('/api/v1/mangas', createManga);
+
+router.get('/api/v1/mangas/:id', getMangaById);
+router.delete('/api/v1/mangas/:id', deleteMangaById);
+
+export { router };

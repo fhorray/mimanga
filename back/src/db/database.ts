@@ -1,17 +1,22 @@
-import { Client } from 'pg';
+import { createMangasTable } from './models/mangas';
+
+import { Pool } from 'pg';
 import 'dotenv/config';
 
-const client = new Client({
+const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
+export default pool;
+
 (async () => {
   try {
-    await client.connect();
+    await pool.connect();
+
     console.log('Connected to the database');
 
-    const res = await client.query('SELECT NOW()');
-    console.log('Database response: ', res.rows[0]);
+    // Create Mangas Table
+    await createMangasTable();
   } catch (error) {
     console.error('Error connecting to the database: ', error);
   }

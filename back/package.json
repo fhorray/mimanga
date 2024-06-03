@@ -15,9 +15,11 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@types/morgan": "^1.9.9",
     "@types/pg": "^8.11.6",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "morgan": "^1.10.0",
     "pg": "^8.11.5"
   }
 }

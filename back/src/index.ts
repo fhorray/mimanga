@@ -1,6 +1,10 @@
 import express from 'express';
+import morgan from 'morgan';
 import { router as mangasRouter } from '@/routes/Mangas';
 import 'dotenv/config';
+import '@/db/database';
+
+morgan('dev');
 
 const app = express();
 app.use(express.json());
