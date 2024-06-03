@@ -52,3 +52,35 @@ export const deleteManga = async (id: string) => {
     throw error;
   }
 };
+
+// UPDATE MANGA
+export const updateManga = async (
+  id: number,
+  data: Partial<Manga>,
+): Promise<void> => {
+  try {
+    // TODO: Estudar a fundo esse controler!
+
+    const fieldsToUpdate = Object.keys(data)
+      .filter((key) => data[key as keyof Manga] !== undefined) // it filters null and undefined fields
+      .map((key) => `${key} = $${Object.keys(data).indexOf(key) + 1}`)
+      .join(', '); // creates palceholders
+
+    const values = Object.values(data).filter((value) => value !== undefined); // gets the values to be updated
+
+    if (fieldsToUpdate.length === 0) {
+      return;
+    }
+
+    const query = `
+    UPDATE mangas 
+    SET ${fieldsToUpdate}
+    WHERE id = $${values.length + 1}
+    `;
+
+    await pool.query(query, [...values, id]);
+  } catch (error) {
+    console.log('Error updating manga: ', error);
+    throw error;
+  }
+};

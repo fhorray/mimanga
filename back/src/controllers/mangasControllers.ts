@@ -1,7 +1,12 @@
 import type { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { deleteManga, getMangas, insertManga } from '@/db/models/mangas';
+import {
+  deleteManga,
+  getMangas,
+  insertManga,
+  updateManga,
+} from '@/db/models/mangas';
 
 // TODO: separete in files
 
@@ -42,6 +47,18 @@ export const getMangaById = async (req: Request, res: Response) => {
   }
 
   res.status(StatusCodes.OK).json(manga);
+};
+// UPDATE A MANGA BY ID
+export const updateMangaById = async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const updatedData = req.body;
+
+  if (!updatedData.title || !updatedData.author) {
+    return res.status(StatusCodes.BAD_REQUEST).json('No data provided!');
+  }
+
+  await updateManga(id, updatedData);
+  res.status(StatusCodes.OK).json('Successfully!');
 };
 
 // CREATE A MANGA

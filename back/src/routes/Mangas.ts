@@ -4,14 +4,17 @@ import {
   deleteMangaById,
   getAllMangas,
   getMangaById,
+  updateMangaById,
 } from '../controllers/mangasControllers';
 
-const router = express.Router();
+const mangasRouter = express.Router();
 
-router.get('/api/v1/mangas', getAllMangas);
-router.post('/api/v1/mangas', createManga);
+mangasRouter.route('/api/v1/mangas').get(getAllMangas).post(createManga);
 
-router.get('/api/v1/mangas/:id', getMangaById);
-router.delete('/api/v1/mangas/:id', deleteMangaById);
+mangasRouter
+  .route('/api/v1/mangas/:id')
+  .get(getMangaById)
+  .patch(updateMangaById)
+  .delete(deleteMangaById);
 
-export { router };
+export { mangasRouter };
