@@ -1,5 +1,5 @@
 import express from 'express';
-import { router as mangasRouter } from './routes/Mangas';
+import { router as mangasRouter } from '@/routes/Mangas';
 import 'dotenv/config';
 
 const app = express();
