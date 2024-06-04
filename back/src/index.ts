@@ -2,7 +2,6 @@ import express from 'express';
 import morgan from 'morgan';
 import { mangasRouter } from '@/routes/Mangas';
 import 'dotenv/config';
-import '@/db/database';
 
 morgan('dev');
 

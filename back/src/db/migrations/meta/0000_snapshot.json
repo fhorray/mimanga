@@ -1,5 +1,5 @@
 {
-  "id": "f1b13324-b04e-48f3-9d3e-d5634a4b54f2",
+  "id": "e746e029-d14c-4a8c-8fa8-7a9df3b8f5aa",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -12,7 +12,8 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "title": {
           "name": "title",
@@ -24,7 +25,7 @@
           "name": "author",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
