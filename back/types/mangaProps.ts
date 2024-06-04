@@ -1,6 +1,7 @@
 export interface Manga {
   id: number;
   title: string;
+  cover: string;
   author: string;
   illustrator: string;
   publisher: {

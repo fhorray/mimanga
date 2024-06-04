@@ -1,15 +1,40 @@
 import type { Manga } from 'types/mangaProps';
 import pool from '@/db/database';
 
-// CREATE TABLE
-export const createMangasTable = async (): Promise<void> => {
+// CREATE TABLES
+export const createTables = async (): Promise<void> => {
   try {
     await pool.query(`
+    -- PUBLISHERS TABLE
+    CREATE TABLE IF NOT EXISTS publishers (
+      id SERIAL PRIMARY KEY,
+      original VARCHAR(255),
+      english VARCHAR(255)
+    );
+
+    -- ORIGINAL_RUNS TABLE
+    CREATE TABLE IF NOT EXISTS original_runs (
+      id SERIAL PRIMARY KEY,
+      start_date DATE,
+      end_date DATE
+    );
+
+    -- MANGAS TABLE
     CREATE TABLE IF NOT EXISTS mangas (
       id SERIAL PRIMARY KEY,
       title VARCHAR(255) NOT NULL,
-      author VARCHAR(255) NOT NULL
-    )
+      author VARCHAR(255),
+      cover VARCHAR(255) DEFAULT 'https://placehold.jp/467x700.png',
+      illustrator VARCHAR(255),
+      publisher_id INTEGER REFERENCES publishers(id),
+      demographic VARCHAR(255),
+      genre VARCHAR(255)[] DEFAULT '{}',
+      original_run_id INTEGER REFERENCES original_runs(id),
+      volumes INTEGER,
+      chapters INTEGER,
+      synopsis TEXT
+    );
+
     `);
   } catch (error) {
     console.error('Error creating table "Mangas": ', error);
@@ -29,6 +54,7 @@ export const getMangas = async (): Promise<Manga[] | undefined> => {
 
 // INSERT MANGA
 export const insertManga = async (title: string, author: string) => {
+  // TODO: modify the data parameters to use the Manga type
   try {
     const query = `
       INSERT INTO mangas (title, author) VALUES ($1, $2) RETURNING *

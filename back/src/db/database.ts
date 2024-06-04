@@ -1,4 +1,4 @@
-import { createMangasTable } from './models/mangas';
+import { createTables } from './models/mangas';
 
 import { Pool } from 'pg';
 import 'dotenv/config';
@@ -16,7 +16,7 @@ export default pool;
     console.log('Connected to the database');
 
     // Create Mangas Table
-    await createMangasTable();
+    await createTables();
   } catch (error) {
     console.error('Error connecting to the database: ', error);
   }
