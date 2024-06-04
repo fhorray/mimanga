@@ -2,10 +2,14 @@ import express from 'express';
 import morgan from 'morgan';
 import { mangasRouter } from '@/routes/Mangas';
 import 'dotenv/config';
-
-morgan('dev');
+import { globalMiddleware } from './middlewares/global';
 
 const app = express();
+morgan('short');
+
+// Middlewares Global
+app.use(globalMiddleware);
+
 app.use(express.json());
 app.use(mangasRouter);
 

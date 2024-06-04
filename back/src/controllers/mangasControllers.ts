@@ -4,7 +4,6 @@ import { StatusCodes } from 'http-status-codes';
 import { mangasTable, type InsertManga, type SelectManga } from '@/db/schemas';
 import { db } from '@/db/config';
 import { eq, inArray } from 'drizzle-orm';
-import type { Manga } from 'types/mangaProps';
 
 // TODO: separete in files
 
