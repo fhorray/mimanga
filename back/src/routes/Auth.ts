@@ -1,14 +1,24 @@
+import express from 'express';
 import {
   authStatus,
-  createUser,
+  createAccount,
+  login,
   getAllUsers,
-} from "@/controllers/authControllers";
-import express from "express";
+  logout,
+} from '@/controllers/authControllers';
+import passport from 'passport';
 
 const authRouter = express.Router();
 
-authRouter.route("/").get(getAllUsers).post(createUser);
+// TODO: Create a /users route
+authRouter.route('/').get(getAllUsers);
 
-authRouter.route("/status").get(authStatus);
+authRouter.route('/signin').post(passport.authenticate('local'), login);
+
+authRouter.route('/signout').get(logout);
+
+authRouter.route('/status').get(authStatus);
+
+authRouter.route('/signup').post(createAccount);
 
 export { authRouter };
