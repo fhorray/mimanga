@@ -133,5 +133,22 @@
       "chapters": 108,
       "synopsis": "Death Note follows Light Yagami, a high school student who discovers a supernatural notebook that allows him to kill anyone whose name he writes in it. Light decides to use the notebook to rid the world of criminals and establish himself as a god-like figure. However, a mysterious detective known as L is determined to stop Light's reign of terror."
     }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "admin"
+    },
+    {
+      "id": "2",
+      "username": "user",
+      "password": "user"
+    },
+    {
+      "id": "3",
+      "username": "test",
+      "password": "test"
+    }
   ]
 }

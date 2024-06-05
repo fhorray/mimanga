@@ -1,9 +1,9 @@
-import type { Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
+import type { Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 
-import { mangasTable, type InsertManga, type SelectManga } from '@/db/schemas';
-import { db } from '@/db/config';
-import { eq, inArray } from 'drizzle-orm';
+import { mangasTable, type InsertManga, type SelectManga } from "@/db/schemas";
+import { db } from "@/db/config";
+import { eq, inArray } from "drizzle-orm";
 
 // TODO: separete in files
 
@@ -14,10 +14,10 @@ export const getAllMangas = async (req: Request, res: Response) => {
 
     res.status(StatusCodes.OK).json(mangas);
   } catch (error) {
-    console.error('Error fetching mangas: ', error);
+    console.error("Error fetching mangas: ", error);
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Error fetching mangas' });
+      .json({ error: "Error fetching mangas" });
   }
 };
 
@@ -30,17 +30,17 @@ export const getMangaById = async (req: Request, res: Response) => {
     const manga = mangas.find((manga) => manga.id === id);
 
     if (!manga) {
-      res.status(StatusCodes.BAD_REQUEST).json({ error: 'Manga not found' });
+      res.status(StatusCodes.BAD_REQUEST).json({ error: "Manga not found" });
     }
 
     res.status(StatusCodes.OK).json({
-      status: 'success',
+      status: "success",
       manga,
     });
   } catch (error) {
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Manga not found' });
+      .json({ error: "Manga not found" });
   }
 };
 
@@ -54,20 +54,20 @@ export const updateMangaById = async (req: Request, res: Response) => {
     const manga = mangas.find((manga) => manga.id === id);
 
     if (!manga) {
-      res.status(StatusCodes.BAD_REQUEST).json({ error: 'Manga not found' });
+      res.status(StatusCodes.BAD_REQUEST).json({ error: "Manga not found" });
     }
 
     // Update manga
     await db.update(mangasTable).set(newData).where(eq(mangasTable.id, id));
 
     res.status(StatusCodes.OK).json({
-      status: 'success',
+      status: "success",
       manga: newData,
     });
   } catch (error) {
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Error updating manga' });
+      .json({ error: "Error updating manga" });
   }
 };
 
@@ -77,23 +77,23 @@ export const createManga = async (req: Request, res: Response) => {
     const data: InsertManga = req.body;
 
     if (!data.title) {
-      console.log('SEM DATA');
+      console.log("SEM DATA");
       console.log(data);
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ error: 'Please provide a manga data' });
+        .json({ error: "Please provide a manga data" });
     }
 
     await db.insert(mangasTable).values(data);
 
     res.status(StatusCodes.CREATED).json({
-      status: 'success',
+      status: "success",
       manga: data,
     });
   } catch (error) {
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Error trying to create a manga!!' });
+      .json({ error: "Error trying to create a manga!!" });
   }
 };
 
@@ -107,13 +107,13 @@ export const deleteMangaById = async (req: Request, res: Response) => {
     if (!manga) {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ error: 'Manga not found' });
+        .json({ error: "Manga not found" });
     }
 
     await db.delete(mangasTable).where(eq(mangasTable.id, id)).returning();
 
     res.status(StatusCodes.OK).json({
-      status: 'success',
+      status: "success",
     });
   } catch (error) {}
 };
@@ -127,17 +127,17 @@ export const deleteSelectedMangas = async (req: Request, res: Response) => {
     const mangasToDelete = mangas.filter((manga) => ids.includes(manga.id));
 
     if (!mangasToDelete.length) {
-      return res.json({ error: 'No mangas selected!' });
+      return res.json({ error: "No mangas selected!" });
     }
 
     await db.delete(mangasTable).where(inArray(mangasTable.id, ids));
 
     res.status(StatusCodes.OK).json({
-      status: 'success',
+      status: "success",
     });
   } catch (error) {
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Error trying to delete mangas' });
+      .json({ error: "Error trying to delete mangas" });
   }
 };

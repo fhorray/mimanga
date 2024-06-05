@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 import {
   createManga,
   deleteMangaById,
@@ -6,18 +6,18 @@ import {
   getAllMangas,
   getMangaById,
   updateMangaById,
-} from '../controllers/mangasControllers';
+} from "../controllers/mangasControllers";
 
 const mangasRouter = express.Router();
 
 mangasRouter
-  .route('/api/v1/mangas') //pretier-ignore
+  .route("/")
   .get(getAllMangas)
   .post(createManga)
   .delete(deleteSelectedMangas);
 
 mangasRouter
-  .route('/api/v1/mangas/:id')
+  .route("/:id")
   .get(getMangaById)
   .patch(updateMangaById)
   .delete(deleteMangaById);

@@ -1,3 +1,5 @@
+import type { Session, SessionData } from "express-session";
+
 export interface Manga {
   id: number;
   title: string;
@@ -17,4 +19,18 @@ export interface Manga {
   volumes: number;
   chapters: number;
   synopsis: string;
+}
+
+export interface CustomSessionData extends SessionData {
+  visited?: boolean;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    password: string;
+  };
+}
+
+export interface CustomRequestData extends Request {
+  session: Session & Partial<CustomSessionData>;
 }
