@@ -13,7 +13,13 @@ const authRouter = express.Router();
 // TODO: Create a /users route
 authRouter.route('/').get(getAllUsers);
 
-authRouter.route('/signin').post(passport.authenticate('local'), login);
+authRouter.route('/signin').post(
+  passport.authenticate('local', {
+    successRedirect: '/api/v1/auth/status',
+    failureRedirect: '/api/v1/auth/signin',
+  }),
+  login,
+);
 
 authRouter.route('/signout').get(logout);
 
