@@ -8,6 +8,8 @@ import type { CustomSessionData } from 'types/types';
 import { db } from '@/db/config';
 import { users as usersTable } from '@/db/schemas';
 
+import bcrypt from 'bcrypt';
+
 // GET ALL USERS
 export const getAllUsers = async (req: Request, res: Response) => {
   const users = await db.select().from(usersTable);
@@ -36,8 +38,8 @@ export const login = async (req: Request, res: Response) => {
         .json({ message: 'BAD INFORMATION' });
     }
 
-    const isAuth = req.isAuthenticated();
-    console.log('ESTA LOGADO? ', isAuth);
+    const isLoggedIn = req.isAuthenticated();
+    console.log('ESTA LOGADO? ', isLoggedIn);
 
     res.status(StatusCodes.OK).send('Successfully logged in!');
   } catch (error) {
@@ -56,8 +58,8 @@ export const logout = async (req: Request, res: Response) => {
     }
   });
 
-  const isAuth = req.isAuthenticated();
-  console.log('ESTA LOGADO? ', isAuth);
+  const isLoggedIn = req.isAuthenticated();
+  console.log('ESTA LOGADO? ', isLoggedIn);
 
   res.send('Logged out');
 };
@@ -86,16 +88,16 @@ export const authStatus = async (
   req: Request & { session: Session & Partial<CustomSessionData> },
   res: Response,
 ) => {
-  const isAuth = req.isAuthenticated();
-  console.log('ESTA LOGADO? ', isAuth);
+  const isLoggedIn = req.isAuthenticated();
+  console.log('ESTA LOGADO? ', isLoggedIn);
 
-  if (!isAuth) {
+  if (!isLoggedIn) {
     return res
       .status(StatusCodes.UNAUTHORIZED)
       .json({ message: 'UNAUTHORIZED' });
   }
 
-  if (isAuth) {
+  if (isLoggedIn) {
     return res.status(StatusCodes.OK).json({ message: 'AUTHORIZED' });
   }
 
