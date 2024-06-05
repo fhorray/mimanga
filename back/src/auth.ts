@@ -3,6 +3,7 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import { users, type SelectUser } from './db/schemas';
 import { db } from './db/config';
 import { eq } from 'drizzle-orm';
+import bcrypt from 'bcryptjs';
 
 const findUser = async (email: string): Promise<SelectUser[] | null> => {
   const user = await db.select().from(users).where(eq(users.email, email));
@@ -13,7 +14,9 @@ const findUser = async (email: string): Promise<SelectUser[] | null> => {
 
 const validatePassword = async (user: SelectUser, password: string) => {
   // Implemente a validação da senha
-  if (user.password === password) return true;
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (isMatch) return true;
 
   return false;
 };

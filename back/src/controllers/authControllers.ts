@@ -6,9 +6,16 @@ import type { Session } from 'express-session';
 import { StatusCodes } from 'http-status-codes';
 import type { CustomSessionData } from 'types/types';
 import { db } from '@/db/config';
-import { users as usersTable } from '@/db/schemas';
+import {
+  users as usersTable,
+  type InsertUser,
+  type SelectUser,
+} from '@/db/schemas';
 
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
+
+import { eq, sql } from 'drizzle-orm';
+import { findUserById } from '@/utils/users';
 
 // GET ALL USERS
 export const getAllUsers = async (req: Request, res: Response) => {
@@ -20,27 +27,6 @@ export const getAllUsers = async (req: Request, res: Response) => {
 // LOGIN
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
-    const users = await db.select().from(usersTable);
-
-    const findUser = users.find((user) => user.email === email);
-
-    if (!findUser) {
-      return res
-        .status(StatusCodes.UNAUTHORIZED)
-        .json({ error: 'BAD INFORMATION' });
-    }
-
-    // VERIFICAR SE A SENHA ESTÁ CORRETA
-    if (findUser.email !== email || findUser.password !== password) {
-      return res
-        .status(StatusCodes.UNAUTHORIZED)
-        .json({ message: 'BAD INFORMATION' });
-    }
-
-    const isLoggedIn = req.isAuthenticated();
-    console.log('ESTA LOGADO? ', isLoggedIn);
-
     res.status(StatusCodes.OK).send('Successfully logged in!');
   } catch (error) {
     console.error('Error logging in: ', error);
@@ -65,22 +51,76 @@ export const logout = async (req: Request, res: Response) => {
 };
 
 // CREATE ACCOUNT
-export const createAccount = async (req: Request, res: Response) => {
-  const newUserData = req.body;
+export const createAccount = async (
+  req: Request & { session: Session & Partial<CustomSessionData> },
+  res: Response,
+) => {
+  const newUserData: SelectUser = req.body;
+  const users = await db.select().from(usersTable);
+
+  // HASH THE PASSWORD
+  const salt = await bcrypt.genSalt();
+  const hashedPassword = await bcrypt.hash(newUserData.password, salt);
+
   if (!newUserData.email || !newUserData.password) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .json({ message: 'NO USER INFORMATION PROVIDED' });
   }
 
+  // USERNAME CREATION
+  if (!newUserData.username) {
+    const username = newUserData.email.split('@')[0];
+    const usernameExists = users.find((user) => user.username === username);
+
+    if (usernameExists) {
+      // SE esse username já existir com base no email ja existir, criar um username com base no email + um número com 3 digitos aleatorios + os segundos do horario atual.os
+      newUserData.username =
+        username + Math.floor(Math.random() * 10) + new Date().getSeconds();
+    } else {
+      newUserData.username = username;
+    }
+  }
+
+  // verify if user is admin in order to pass role as 'admin' inside de req.
+  if (newUserData.role === 'admin') {
+    const isLoggedIn = req.isAuthenticated();
+
+    if (!isLoggedIn) {
+      const userId = req.session.passport?.user;
+      const user = await findUserById(userId);
+
+      if (!user)
+        return res
+          .status(StatusCodes.UNAUTHORIZED)
+          .json({ message: 'UNAUTHORIZED' });
+
+      if (user.role === 'admin') {
+        newUserData.role = 'admin';
+      }
+      newUserData.role = 'user';
+    }
+  }
+
   const createdUser = await db
     .insert(usersTable)
-    .values(newUserData)
-    .returning();
+    .values({
+      ...newUserData,
+      password: hashedPassword,
+      username: newUserData.username,
+    })
+    .returning({
+      id: usersTable.id,
+      name: usersTable.name,
+      email: usersTable.email,
+      password: sql<string>`'********'`.as('usersTable.password'),
+      username: usersTable.username,
+      role: usersTable.role,
+    });
 
   res
     .status(StatusCodes.OK)
-    .json({ message: 'Account created!', user: createdUser });
+    .json({ message: 'Account created!', userInformation: createdUser });
 };
 
 // AUTH STATUS
@@ -89,7 +129,6 @@ export const authStatus = async (
   res: Response,
 ) => {
   const isLoggedIn = req.isAuthenticated();
-  console.log('ESTA LOGADO? ', isLoggedIn);
 
   if (!isLoggedIn) {
     return res
@@ -97,9 +136,8 @@ export const authStatus = async (
       .json({ message: 'UNAUTHORIZED' });
   }
 
-  if (isLoggedIn) {
-    return res.status(StatusCodes.OK).json({ message: 'AUTHORIZED' });
-  }
+  const userId = req.session.passport?.user;
+  const user = await findUserById(userId);
 
-  res.status(StatusCodes.OK).json({ message: 'STATUS INFO' });
+  res.status(StatusCodes.OK).json({ message: 'YOUR USER STATUS', user });
 };

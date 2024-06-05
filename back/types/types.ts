@@ -23,10 +23,7 @@ export interface Manga {
 
 export interface CustomSessionData extends SessionData {
   visited?: boolean;
-  user: {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
+  passport?: {
+    user: string;
   };
 }

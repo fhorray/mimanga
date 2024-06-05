@@ -15,7 +15,7 @@ authRouter.route('/').get(getAllUsers);
 
 authRouter.route('/signin').post(
   passport.authenticate('local', {
-    successRedirect: '/api/v1/auth/status',
+    // successRedirect: '/api/v1/auth/status',
     failureRedirect: '/api/v1/auth/signin',
   }),
   login,
