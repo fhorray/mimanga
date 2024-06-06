@@ -1,39 +1,13 @@
-import type { Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
-import type { CustomRequestData } from 'types/types';
-
 import { db } from '@/db/config';
 import { users as usersTable, type SelectUser } from '@/db/schemas';
 
+import { StatusCodes } from 'http-status-codes';
+
+import type { Response } from 'express';
+import type { CustomRequestData } from 'types/types';
+
 import * as bcrypt from 'bcryptjs';
-
 import { sql } from 'drizzle-orm';
-import { findUserById } from '@/utils/users';
-
-// LOGIN
-export const login = async (req: Request, res: Response) => {
-  try {
-    res.status(StatusCodes.OK).send('Successfully logged in!');
-  } catch (error) {
-    console.error('Error logging in: ', error);
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: 'Error logging in' });
-  }
-};
-
-// LOGOUT
-export const logout = async (req: Request, res: Response) => {
-  req.logout((err) => {
-    if (err) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
-    } else {
-      res.status(StatusCodes.OK).send('Logged out');
-    }
-  });
-
-  res.send('Logged out');
-};
 
 // CREATE ACCOUNT
 export const createAccount = async (req: CustomRequestData, res: Response) => {
@@ -85,12 +59,4 @@ export const createAccount = async (req: CustomRequestData, res: Response) => {
   res
     .status(StatusCodes.OK)
     .json({ message: 'Account created!', userInformation: createdUser });
-};
-
-// AUTH STATUS
-export const authStatus = async (req: CustomRequestData, res: Response) => {
-  const userId = req.session.passport?.user;
-  const user = await findUserById(userId);
-
-  res.status(StatusCodes.OK).json({ message: 'YOUR USER STATUS', user });
 };

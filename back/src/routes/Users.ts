@@ -1,10 +1,7 @@
-import {
-  deleteUserById,
-  getAllUsers,
-  getUserById,
-  updateUserById,
-} from '@/controllers/usersControllers';
-
+import { deleteUser } from '@/controllers/users/deleteUser';
+import { getAllUsers } from '@/controllers/users/getAllUsers';
+import { getUser } from '@/controllers/users/getUser';
+import { updateUser } from '@/controllers/users/updateUser';
 import { isAdmin } from '@/middlewares/isAdmin';
 import { isAdminOrSelf } from '@/middlewares/isAdminOrSelf';
 
@@ -16,8 +13,8 @@ usersRouter.route('/').get(isAdmin, getAllUsers);
 
 usersRouter
   .route('/:id')
-  .get(isAdminOrSelf, getUserById)
-  .patch(isAdminOrSelf, updateUserById)
-  .delete(isAdminOrSelf, deleteUserById);
+  .get(isAdminOrSelf, getUser)
+  .patch(isAdminOrSelf, updateUser)
+  .delete(isAdminOrSelf, deleteUser);
 
 export { usersRouter };
