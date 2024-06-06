@@ -2,9 +2,12 @@ import type { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import {
+  mangas,
   mangas as mangasTable,
+  publishers,
   type InsertManga,
   type SelectManga,
+  type SelectPublisher,
 } from '@/db/schemas';
 import { db } from '@/db/config';
 import { eq, inArray } from 'drizzle-orm';
@@ -14,7 +17,20 @@ import { eq, inArray } from 'drizzle-orm';
 // GET ALL MANGAS
 export const getAllMangas = async (req: Request, res: Response) => {
   try {
-    const mangas = await db.select().from(mangasTable);
+    const mangas = await db.query.mangas.findMany({
+      with: {
+        originalRun: {
+          columns: {
+            id: false,
+          },
+        },
+        publishers: {
+          columns: {
+            id: false,
+          },
+        },
+      },
+    });
 
     res.status(StatusCodes.OK).json(mangas);
   } catch (error) {
@@ -29,17 +45,29 @@ export const getAllMangas = async (req: Request, res: Response) => {
 export const getMangaById = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const mangas = await db.select().from(mangasTable);
+    const mangas = await db.query.mangas.findFirst({
+      where: eq(mangasTable.id, id),
+      with: {
+        originalRun: {
+          columns: {
+            id: false,
+          },
+        },
+        publishers: {
+          columns: {
+            id: false,
+          },
+        },
+      },
+    });
 
-    const manga = mangas.find((manga) => manga.id === id);
-
-    if (!manga) {
+    if (!mangas) {
       res.status(StatusCodes.BAD_REQUEST).json({ error: 'Manga not found' });
     }
 
     res.status(StatusCodes.OK).json({
       status: 'success',
-      manga,
+      mangas,
     });
   } catch (error) {
     return res
@@ -52,21 +80,51 @@ export const getMangaById = async (req: Request, res: Response) => {
 export const updateMangaById = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const newData = req.body;
-    const mangas = await db.select().from(mangasTable);
 
-    const manga = mangas.find((manga) => manga.id === id);
+    // Buscar o manga pelo ID
+    const manga = await db.query.mangas.findFirst({
+      where: (mangas, { eq }) => eq(mangas.id, id),
+      with: {
+        originalRun: true,
+        publishers: true,
+      },
+    });
 
     if (!manga) {
-      res.status(StatusCodes.BAD_REQUEST).json({ error: 'Manga not found' });
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: 'Manga not found' });
     }
 
-    // Update manga
-    await db.update(mangasTable).set(newData).where(eq(mangasTable.id, id));
+    const mangaData = req.body;
+    const publishersData = mangaData.publishers;
+    const publisherId = manga.publisherId;
+
+    // Remover dados aninhados de publishers do objeto mangaData
+    delete mangaData.publishers;
+
+    // Atualizar tabela de mangas
+    await db.update(mangas).set(mangaData).where(eq(mangas.id, id));
+
+    // Atualizar tabela de publishers, caso exista publishersData e publisherId
+    if (publishersData && publisherId) {
+      await db
+        .update(publishers)
+        .set(publishersData)
+        .where(eq(publishers.id, publisherId));
+    }
+
+    // Buscar novamente o manga atualizado com suas relações
+    const updatedManga = await db.query.mangas.findFirst({
+      where: (mangas, { eq }) => eq(mangas.id, id),
+      with: {
+        originalRun: true,
+        publishers: true,
+      },
+    });
 
     res.status(StatusCodes.OK).json({
-      status: 'success',
-      manga: newData,
+      manga: updatedManga,
     });
   } catch (error) {
     return res

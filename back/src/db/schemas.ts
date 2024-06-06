@@ -51,11 +51,11 @@ export const demographicEnum = pgEnum('demographic', [
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: text('name').notNull(),
-  username: text('username'),
-  email: text('email').notNull(),
+  username: text('username').unique(),
+  email: text('email').notNull().unique(),
   password: text('password').notNull(),
   role: rolesEnum('roles').default('user').notNull(),
-  favoriteMangas: uuid('favoriteMangas'),
+  createdAt: timestamp('created_at').defaultNow(),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -69,17 +69,14 @@ export const mangas = pgTable('mangas', {
   author: text('author'),
   illustrator: text('illustrator'),
   cover: text('cover'),
-  publisherId: uuid('publisher_id').notNull(),
+  publisherId: uuid('publisher_id'),
   genres: genresEnum('genres'),
   demographic: demographicEnum('demographic'),
   originalRunId: uuid('original_run_id'),
 });
 
 export const mangasRelations = relations(mangas, ({ one, many }) => ({
-  user: one(users, {
-    fields: [mangas.id],
-    references: [users.favoriteMangas],
-  }),
+  favoritedByUsers: many(usersToMangas),
   publishers: one(publishers, {
     fields: [mangas.publisherId],
     references: [publishers.id],
@@ -88,19 +85,21 @@ export const mangasRelations = relations(mangas, ({ one, many }) => ({
     fields: [mangas.originalRunId],
     references: [originalRun.id],
   }),
-  favoritedByUsers: many(usersToMangas),
 }));
 
 // USERS TO MANGAS TABLE
 export const usersToMangas = pgTable(
   'users_to_mangas',
   {
-    userId: uuid('user_id').notNull().references(()=> users.id), //prettier-ignore
-    mangaId: uuid('manga_id').notNull().references(()=> mangas.id), //prettier-ignore
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id),
+    mangaId: uuid('manga_id')
+      .notNull()
+      .references(() => mangas.id),
   },
-  (t) => ({pk: primaryKey({ columns: [t.userId, t.mangaId] })})); //prettier-ignore
-
-// STUDY: Study about the (t) above
+  (t) => ({ pk: primaryKey(t.userId, t.mangaId) }),
+);
 
 export const usersToMangasRelations = relations(usersToMangas, ({ one }) => ({
   user: one(users, {
@@ -127,7 +126,7 @@ export const publishersRelations = relations(publishers, ({ many }) => ({
 // ORIGINAL RUN TABLE
 export const originalRun = pgTable('original_run', {
   id: uuid('id').primaryKey().defaultRandom(),
-  start: timestamp('start').notNull(),
+  start: timestamp('start'),
   end: timestamp('end'),
 });
 
@@ -147,3 +146,6 @@ export type SelectManga = typeof mangas.$inferSelect;
 
 export type SelectUser = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
+
+export type SelectPublisher = typeof users.$inferSelect;
+export type InsertPublisher = typeof users.$inferInsert;

@@ -1,5 +1,5 @@
 {
-  "id": "2287bfc9-1300-4c2f-8340-c3caf84cd008",
+  "id": "accdbd2f-e304-407f-acdc-19b2e30cd24c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -43,7 +43,7 @@
           "name": "publisher_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "genres": {
           "name": "genres",
@@ -86,7 +86,7 @@
           "name": "start",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "end": {
           "name": "end",
@@ -200,17 +200,33 @@
           "notNull": true,
           "default": "'user'"
         },
-        "favoriteMangas": {
-          "name": "favoriteMangas",
-          "type": "uuid",
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "users_username_unique": {
+          "name": "users_username_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "username"
+          ]
+        },
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      }
     },
     "public.users_to_mangas": {
       "name": "users_to_mangas",

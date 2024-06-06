@@ -3,19 +3,21 @@ import {
   getAllUsers,
   getUserById,
   updateUserById,
-} from "@/controllers/usersControllers";
+} from '@/controllers/usersControllers';
 
-import express from "express";
-import passport from "passport";
+import { isAdmin } from '@/middlewares/isAdmin';
+import { isAdminOrSelf } from '@/middlewares/isAdminOrSelf';
+
+import express from 'express';
 
 const usersRouter = express.Router();
 
-usersRouter.route("/").get(getAllUsers);
+usersRouter.route('/').get(isAdmin, getAllUsers);
 
 usersRouter
-  .route("/:id")
-  .get(getUserById)
-  .patch(updateUserById)
-  .delete(deleteUserById);
+  .route('/:id')
+  .get(isAdminOrSelf, getUserById)
+  .patch(isAdminOrSelf, updateUserById)
+  .delete(isAdminOrSelf, deleteUserById);
 
 export { usersRouter };

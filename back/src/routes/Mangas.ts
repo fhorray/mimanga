@@ -1,4 +1,4 @@
-import express from "express";
+import express from 'express';
 import {
   createManga,
   deleteMangaById,
@@ -6,20 +6,21 @@ import {
   getAllMangas,
   getMangaById,
   updateMangaById,
-} from "../controllers/mangasControllers";
+} from '../controllers/mangasControllers';
+import { isAdmin } from '@/middlewares/isAdmin';
 
 const mangasRouter = express.Router();
 
 mangasRouter
-  .route("/")
+  .route('/')
   .get(getAllMangas)
-  .post(createManga)
-  .delete(deleteSelectedMangas);
+  .post(isAdmin, createManga)
+  .delete(isAdmin, deleteSelectedMangas);
 
 mangasRouter
-  .route("/:id")
+  .route('/:id')
   .get(getMangaById)
-  .patch(updateMangaById)
-  .delete(deleteMangaById);
+  .patch(isAdmin, updateMangaById)
+  .delete(isAdmin, deleteMangaById);
 
 export { mangasRouter };

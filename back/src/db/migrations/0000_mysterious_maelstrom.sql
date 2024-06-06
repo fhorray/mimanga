@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS "mangas" (
 	"author" text,
 	"illustrator" text,
 	"cover" text,
-	"publisher_id" uuid NOT NULL,
+	"publisher_id" uuid,
 	"genres" "genres",
 	"demographic" "demographic",
 	"original_run_id" uuid
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS "mangas" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "original_run" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"start" timestamp NOT NULL,
+	"start" timestamp,
 	"end" timestamp
 );
 --> statement-breakpoint
@@ -53,7 +53,9 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"email" text NOT NULL,
 	"password" text NOT NULL,
 	"roles" "roles" DEFAULT 'user' NOT NULL,
-	"favoriteMangas" uuid
+	"created_at" timestamp DEFAULT now(),
+	CONSTRAINT "users_username_unique" UNIQUE("username"),
+	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users_to_mangas" (
