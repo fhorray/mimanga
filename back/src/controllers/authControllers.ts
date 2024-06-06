@@ -1,36 +1,24 @@
-import * as express from 'express';
+import type { Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
+import type { CustomRequestData } from "types/types";
 
-import { mockUsers } from '@/db/mockUsers';
-import type { Request, Response } from 'express';
-import type { Session } from 'express-session';
-import { StatusCodes } from 'http-status-codes';
-import type { CustomSessionData } from 'types/types';
-import { db } from '@/db/config';
-import {
-  users as usersTable,
-  type InsertUser,
-  type SelectUser,
-} from '@/db/schemas';
+import { db } from "@/db/config";
+import { users as usersTable, type SelectUser } from "@/db/schemas";
 
-import * as bcrypt from 'bcryptjs';
+import * as bcrypt from "bcryptjs";
 
-import { eq, sql } from 'drizzle-orm';
-import { findUserById } from '@/utils/users';
-
-// GET ALL USERS
-export const getAllUsers = async (req: Request, res: Response) => {
-  const users = await db.select().from(usersTable);
-
-  res.status(200).send(users);
-};
+import { sql } from "drizzle-orm";
+import { findUserById } from "@/utils/users";
 
 // LOGIN
 export const login = async (req: Request, res: Response) => {
   try {
-    res.status(StatusCodes.OK).send('Successfully logged in!');
+    res.status(StatusCodes.OK).send("Successfully logged in!");
   } catch (error) {
-    console.error('Error logging in: ', error);
-    return res.status(500).json({ error: 'Error logging in' });
+    console.error("Error logging in: ", error);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: "Error logging in" });
   }
 };
 
@@ -40,21 +28,15 @@ export const logout = async (req: Request, res: Response) => {
     if (err) {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
     } else {
-      res.status(StatusCodes.OK).send('Logged out');
+      res.status(StatusCodes.OK).send("Logged out");
     }
   });
 
-  const isLoggedIn = req.isAuthenticated();
-  console.log('ESTA LOGADO? ', isLoggedIn);
-
-  res.send('Logged out');
+  res.send("Logged out");
 };
 
 // CREATE ACCOUNT
-export const createAccount = async (
-  req: Request & { session: Session & Partial<CustomSessionData> },
-  res: Response,
-) => {
+export const createAccount = async (req: CustomRequestData, res: Response) => {
   const newUserData: SelectUser = req.body;
   const users = await db.select().from(usersTable);
 
@@ -65,12 +47,12 @@ export const createAccount = async (
   if (!newUserData.email || !newUserData.password) {
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ message: 'NO USER INFORMATION PROVIDED' });
+      .json({ message: "NO USER INFORMATION PROVIDED" });
   }
 
   // USERNAME CREATION
   if (!newUserData.username) {
-    const username = newUserData.email.split('@')[0];
+    const username = newUserData.email.split("@")[0];
     const usernameExists = users.find((user) => user.username === username);
 
     if (usernameExists) {
@@ -83,7 +65,7 @@ export const createAccount = async (
   }
 
   // verify if user is admin in order to pass role as 'admin' inside de req.
-  if (newUserData.role === 'admin') {
+  if (newUserData.role === "admin") {
     const isLoggedIn = req.isAuthenticated();
 
     if (!isLoggedIn) {
@@ -93,12 +75,12 @@ export const createAccount = async (
       if (!user)
         return res
           .status(StatusCodes.UNAUTHORIZED)
-          .json({ message: 'UNAUTHORIZED' });
+          .json({ message: "UNAUTHORIZED" });
 
-      if (user.role === 'admin') {
-        newUserData.role = 'admin';
+      if (user.role === "admin") {
+        newUserData.role = "admin";
       }
-      newUserData.role = 'user';
+      newUserData.role = "user";
     }
   }
 
@@ -113,31 +95,28 @@ export const createAccount = async (
       id: usersTable.id,
       name: usersTable.name,
       email: usersTable.email,
-      password: sql<string>`'********'`.as('usersTable.password'),
+      password: sql<string>`'********'`.as("usersTable.password"),
       username: usersTable.username,
       role: usersTable.role,
     });
 
   res
     .status(StatusCodes.OK)
-    .json({ message: 'Account created!', userInformation: createdUser });
+    .json({ message: "Account created!", userInformation: createdUser });
 };
 
 // AUTH STATUS
-export const authStatus = async (
-  req: Request & { session: Session & Partial<CustomSessionData> },
-  res: Response,
-) => {
+export const authStatus = async (req: CustomRequestData, res: Response) => {
   const isLoggedIn = req.isAuthenticated();
 
   if (!isLoggedIn) {
     return res
       .status(StatusCodes.UNAUTHORIZED)
-      .json({ message: 'UNAUTHORIZED' });
+      .json({ message: "UNAUTHORIZED" });
   }
 
   const userId = req.session.passport?.user;
   const user = await findUserById(userId);
 
-  res.status(StatusCodes.OK).json({ message: 'YOUR USER STATUS', user });
+  res.status(StatusCodes.OK).json({ message: "YOUR USER STATUS", user });
 };

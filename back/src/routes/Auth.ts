@@ -1,30 +1,26 @@
-import express from 'express';
+import express from "express";
 import {
   authStatus,
   createAccount,
   login,
-  getAllUsers,
   logout,
-} from '@/controllers/authControllers';
-import passport from 'passport';
+} from "@/controllers/authControllers";
+import passport from "passport";
 
 const authRouter = express.Router();
 
-// TODO: Create a /users route
-authRouter.route('/').get(getAllUsers);
-
-authRouter.route('/signin').post(
-  passport.authenticate('local', {
+authRouter.route("/signin").post(
+  passport.authenticate("local", {
     // successRedirect: '/api/v1/auth/status',
-    failureRedirect: '/api/v1/auth/signin',
+    failureRedirect: "/api/v1/auth/signin",
   }),
-  login,
+  login
 );
 
-authRouter.route('/signout').get(logout);
+authRouter.route("/signout").get(logout);
 
-authRouter.route('/status').get(authStatus);
+authRouter.route("/status").get(authStatus);
 
-authRouter.route('/signup').post(createAccount);
+authRouter.route("/signup").post(createAccount);
 
 export { authRouter };

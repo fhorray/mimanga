@@ -1,13 +1,14 @@
-import express, { type Request, type Response } from 'express';
-import { mangasRouter } from '@/routes/Mangas';
-import 'dotenv/config';
+import express, { type Request, type Response } from "express";
+import { mangasRouter } from "@/routes/Mangas";
+import "dotenv/config";
 
-import session from 'express-session';
-import pgSession from 'connect-pg-simple';
+import session from "express-session";
+import pgSession from "connect-pg-simple";
 
-import { authRouter } from './routes/Auth';
-import passport from 'passport';
-import './auth';
+import { authRouter } from "./routes/Auth";
+import passport from "passport";
+import "./auth";
+import { usersRouter } from "./routes/Users";
 
 const app = express();
 app.use(express.json());
@@ -21,7 +22,7 @@ app.use(
   session({
     store: new pgStore({
       conString: process.env.DATABASE_URL,
-      tableName: 'sessions',
+      tableName: "sessions",
     }),
     secret: process.env.SESSION_SECRET!,
     saveUninitialized: false,
@@ -30,14 +31,15 @@ app.use(
     cookie: {
       maxAge: 60000 * 60 * 24 * 7, // 1 week
     },
-  }),
+  })
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/api/v1/mangas', mangasRouter);
-app.use('/api/v1/auth', authRouter);
+app.use("/api/v1/mangas", mangasRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/users", usersRouter);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log(`Server is running on http://localhost:${process.env.PORT}`);

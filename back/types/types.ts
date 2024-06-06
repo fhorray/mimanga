@@ -1,4 +1,5 @@
-import type { Session, SessionData } from 'express-session';
+import type { Request } from "express";
+import type { Session, SessionData } from "express-session";
 
 export interface Manga {
   id: number;
@@ -26,4 +27,8 @@ export interface CustomSessionData extends SessionData {
   passport?: {
     user: string;
   };
+}
+
+export interface CustomRequestData extends Request {
+  session: Session & Partial<CustomSessionData>;
 }
