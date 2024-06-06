@@ -1,7 +1,7 @@
 import { findUserById } from '@/utils/users';
 import type { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import type { CustomRequestData } from 'types/types';
+import type { CustomRequestData } from '@/types/types';
 
 // LOGGED USER INFO
 export const me = async (req: CustomRequestData, res: Response) => {

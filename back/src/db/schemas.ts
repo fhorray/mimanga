@@ -39,14 +39,20 @@ export const genresEnum = pgEnum('genres', [
   'Steampunk',
   'Space Opera',
 ]);
-export const demographicEnum = pgEnum('demographic', [
+export const demographicsEnum = pgEnum('demographic', [
   'Shonen',
   'Shojo',
   'Seinen',
   'Josei',
   'Kodomo',
 ]);
+export const providersEnum = pgEnum('providers', [
+  'discord',
+  'local',
+  'google',
+]);
 
+// TODO: Extend token to another table to include other informations
 // USERS TABLE
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -56,6 +62,10 @@ export const users = pgTable('users', {
   password: text('password').notNull(),
   role: rolesEnum('roles').default('user').notNull(),
   createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+  discordId: text('discord_id'),
+  provider: providersEnum('providers').default('local'),
+  token: text('token'),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -71,7 +81,7 @@ export const mangas = pgTable('mangas', {
   cover: text('cover'),
   publisherId: uuid('publisher_id'),
   genres: genresEnum('genres'),
-  demographic: demographicEnum('demographic'),
+  demographic: demographicsEnum('demographic'),
   originalRunId: uuid('original_run_id'),
 });
 

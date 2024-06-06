@@ -1,25 +1,10 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { users, type SelectUser } from './db/schemas';
-import { db } from './db/config';
+import { users } from '../db/schemas';
+import { db } from '../db/config';
 import { eq } from 'drizzle-orm';
-import bcrypt from 'bcryptjs';
 
-const findUser = async (email: string): Promise<SelectUser[] | null> => {
-  const user = await db.select().from(users).where(eq(users.email, email));
-  if (!user) return null;
-
-  return user;
-};
-
-const validatePassword = async (user: SelectUser, password: string) => {
-  // Implemente a validação da senha
-  const isMatch = await bcrypt.compare(password, user.password);
-
-  if (isMatch) return true;
-
-  return false;
-};
+import { findUserByEmail, validatePassword } from '@/utils/users';
 
 passport.use(
   new LocalStrategy(
@@ -27,7 +12,7 @@ passport.use(
     // VERIFY CALLBACK: This is the function that will be called to verify the user
     async (email, password, done) => {
       try {
-        const user = await findUser(email);
+        const user = await findUserByEmail(email);
         if (!user) {
           return done(null, false, { message: 'Usuário não encontrado' });
         }

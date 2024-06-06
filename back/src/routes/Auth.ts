@@ -10,7 +10,7 @@ const authRouter = express.Router();
 
 authRouter.route('/signin').post(
   passport.authenticate('local', {
-    // successRedirect: '/api/v1/auth/status',
+    // successRedirect: '/api/v1/auth/@me',
     failureRedirect: '/api/v1/auth/signin',
   }),
   login,
@@ -18,8 +18,7 @@ authRouter.route('/signin').post(
 
 authRouter.route('/signout').get(logout);
 
-// TODO: remove this route in production, it'll not be used
-authRouter.route('/status').get(isAdmin, me);
+authRouter.route('/@me').get(isAdmin, me);
 
 authRouter.route('/signup').post(createAccount);
 

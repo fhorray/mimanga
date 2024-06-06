@@ -4,7 +4,7 @@ import { users as usersTable, type SelectUser } from '@/db/schemas';
 import { StatusCodes } from 'http-status-codes';
 
 import type { Response } from 'express';
-import type { CustomRequestData } from 'types/types';
+import type { CustomRequestData } from '@/types/types';
 
 import * as bcrypt from 'bcryptjs';
 import { sql } from 'drizzle-orm';

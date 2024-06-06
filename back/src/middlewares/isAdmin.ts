@@ -1,7 +1,7 @@
 import { findUserById } from '@/utils/users';
 import type { NextFunction, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import type { CustomRequestData } from 'types/types';
+import type { CustomRequestData } from '@/types/types';
 
 export const isAdmin = async (
   req: CustomRequestData,

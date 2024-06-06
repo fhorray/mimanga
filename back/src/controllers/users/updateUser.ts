@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 import type { Response } from 'express';
 
 import { StatusCodes } from 'http-status-codes';
-import type { CustomRequestData } from 'types/types';
+import type { CustomRequestData } from '@/types/types';
 
 // UPDATE USER BY ID
 export const updateUser = async (req: CustomRequestData, res: Response) => {

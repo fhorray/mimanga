@@ -6,6 +6,7 @@ import { createManga } from '@/controllers/mangas/createManga';
 import { deleteMangas } from '@/controllers/mangas/deleteMangas';
 import { getManga } from '@/controllers/mangas/getManga';
 import { updateManga } from '@/controllers/mangas/updateManga';
+import passport from 'passport';
 
 const mangasRouter = express.Router();
 
