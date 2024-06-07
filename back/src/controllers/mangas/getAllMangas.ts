@@ -1,8 +1,7 @@
-import { db } from "@/db/config";
-import { mangas as mangasTable } from "@/db/schemas";
-import { mangaServices } from "@/services/mangaServices";
-import type { Request, Response } from "express";
-import { StatusCodes } from "http-status-codes";
+import { mangas as mangasTable } from '@/db/schemas';
+import { mangaServices } from '@/services/mangaServices';
+import type { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 
 // GET ALL MANGAS
 export const getAllMangas = async (req: Request, res: Response) => {
@@ -11,9 +10,9 @@ export const getAllMangas = async (req: Request, res: Response) => {
 
     res.status(StatusCodes.OK).json(mangas);
   } catch (error) {
-    console.error("Error fetching mangas: ", error);
+    console.error('Error fetching mangas: ', error);
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ error: "Error fetching mangas" });
+      .json({ error: 'Error fetching mangas' });
   }
 };

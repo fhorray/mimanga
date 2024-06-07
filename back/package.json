@@ -11,7 +11,6 @@
     "@types/http-status-codes": "^1.2.0",
     "@types/node-jose": "^1.1.13",
     "@types/passport": "^1.0.16",
-    "@types/passport-http-bearer": "^1.0.41",
     "@types/passport-local": "^1.0.38",
     "@types/pg": "^8.11.6",
     "drizzle-kit": "^0.22.2",
@@ -27,9 +26,11 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@types/cors": "^2.8.17",
     "@types/passport-discord": "^0.1.13",
     "bcryptjs": "^2.4.3",
     "connect-pg-simple": "^9.0.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.31.1",
     "drizzle-zod": "^0.5.1",
@@ -38,7 +39,6 @@
     "jose": "^5.4.0",
     "passport": "^0.7.0",
     "passport-discord": "^0.1.4",
-    "passport-http-bearer": "^1.0.1",
     "passport-local": "^1.0.0",
     "pg": "^8.11.5",
     "postgres": "^3.4.4"

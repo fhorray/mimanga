@@ -14,12 +14,14 @@ passport.use(
       try {
         const user = await userServices.findUserByEmail(email);
         if (!user) {
+          console.log('Usuário não encontrado');
           return done(null, false, { message: 'Usuário não encontrado' });
         }
 
         // USE Bcrypt to validate the password
         const isValid = await validatePassword(user[0], password);
         if (!isValid) {
+          console.log('Senha inválida');
           return done(null, false, { message: 'Senha inválida' });
         }
 

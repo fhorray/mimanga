@@ -6,24 +6,16 @@ import type { Response } from 'express';
 
 import { StatusCodes } from 'http-status-codes';
 import type { CustomRequestData } from '@/types/types';
+import { userServices } from '@/services/userServices';
 
 // UPDATE USER BY ID
 export const updateUser = async (req: CustomRequestData, res: Response) => {
   try {
     const { id } = req.params;
     const newData = req.body;
+    //create a function to create a random username
 
-    const updatedUser = await db
-      .update(usersTable)
-      .set(newData)
-      .where(eq(usersTable.id, id))
-      .returning({
-        id: users.id,
-        name: users.name,
-        username: users.username,
-        email: users.email,
-        role: users.role,
-      });
+    const updatedUser = await userServices.updateUser(newData, id);
 
     res.status(StatusCodes.OK).json(updatedUser);
   } catch (error) {

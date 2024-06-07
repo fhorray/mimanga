@@ -18,6 +18,7 @@ const createUser = async (req: Request, res: Response) => {
     // creation of the username
     await createUsername(newUserData, users);
 
+    // TODO: Erro in password
     return await db
       .insert(usersTable)
       .values({

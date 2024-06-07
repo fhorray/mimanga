@@ -2,7 +2,6 @@ import passport from 'passport';
 import { Strategy } from 'passport-strategy';
 import 'dotenv/config';
 import type { Request } from 'express';
-import * as bcrypt from 'bcryptjs';
 
 class ApiTokenStrategy extends Strategy {
   name = 'apitoken';

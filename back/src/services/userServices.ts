@@ -1,14 +1,17 @@
 import { db } from '@/db/config';
-import { users, users as usersTable, type SelectUser } from '@/db/schemas';
+import {
+  users,
+  users as usersTable,
+  type InsertUser,
+  type SelectUser,
+} from '@/db/schemas';
 import { eq } from 'drizzle-orm';
 import type { PgTable } from 'drizzle-orm/pg-core';
 
-// FIND USER BY ID
-const findUserById = async (id: string | undefined) => {
-  if (!id) {
-    throw new Error('Please provide a valid ID');
-  }
+import * as bcrypt from 'bcryptjs';
 
+// FIND USER BY ID
+const findUserById = async (id: string) => {
   return await db.query.users.findFirst({
     where: eq(users.id, id),
     columns: {
@@ -33,8 +36,31 @@ const getUsers = async <T extends PgTable>(table: T) => {
   return await db.select().from(table);
 };
 
+// UPDATE USER BY ID
+const updateUser = async (newData: InsertUser, id: string) => {
+  if (newData.password) {
+    const salt = await bcrypt.genSalt();
+    newData.password = await bcrypt.hash(newData.password, salt);
+  }
+
+  const user = await db
+    .update(usersTable)
+    .set(newData)
+    .where(eq(usersTable.id, id))
+    .returning({
+      id: users.id,
+      name: users.name,
+      username: users.username,
+      email: users.email,
+      role: users.role,
+    });
+
+  return user;
+};
+
 export const userServices = {
   findUserByEmail,
   findUserById,
   getUsers,
+  updateUser,
 };
