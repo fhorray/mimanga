@@ -1,34 +1,34 @@
-import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
-import { users } from '../db/schemas';
-import { db } from '../db/config';
-import { eq } from 'drizzle-orm';
-
-import { findUserByEmail, validatePassword } from '@/utils/users';
+import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
+import { users } from "../db/schemas";
+import { db } from "../db/config";
+import { eq } from "drizzle-orm";
+import { userServices } from "@/services/userServices";
+import { validatePassword } from "@/utils/validatePassword";
 
 passport.use(
   new LocalStrategy(
-    { usernameField: 'email' },
+    { usernameField: "email" },
     // VERIFY CALLBACK: This is the function that will be called to verify the user
     async (email, password, done) => {
       try {
-        const user = await findUserByEmail(email);
+        const user = await userServices.findUserByEmail(email);
         if (!user) {
-          return done(null, false, { message: 'Usuário não encontrado' });
+          return done(null, false, { message: "Usuário não encontrado" });
         }
 
         // USE Bcrypt to validate the password
         const isValid = await validatePassword(user[0], password);
         if (!isValid) {
-          return done(null, false, { message: 'Senha inválida' });
+          return done(null, false, { message: "Senha inválida" });
         }
 
         return done(null, user[0]);
       } catch (error) {
         return done(error);
       }
-    },
-  ),
+    }
+  )
 );
 
 // These functions are used to store the user in the session

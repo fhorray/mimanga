@@ -1,38 +1,35 @@
-import { StatusCodes } from 'http-status-codes';
-import * as jose from 'jose';
-import { db } from '../db/config'; // Importe sua conexão com o banco de dados
-import { users } from '../db/schemas'; // Importe o esquema do usuário
-import { eq } from 'drizzle-orm';
-import type { NextFunction, Request, Response } from 'express';
-import type { CustomRequestData } from '@/types/types';
-import { findUserById } from '@/utils/users';
+import { StatusCodes } from "http-status-codes";
+import * as jose from "jose";
+import type { NextFunction, Request, Response } from "express";
+import type { CustomRequestData } from "@/types/types";
+import { userServices } from "@/services/userServices";
 
 export const tokenMid = async (
   req: CustomRequestData,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const id = req.session.passport?.user;
-    const user = await findUserById(id);
+    const user = await userServices.findUserById(id);
     console.log(user?.token);
 
     if (!user) {
       return res
         .status(StatusCodes.UNAUTHORIZED)
-        .json({ message: 'Usuário não encontrado' });
+        .json({ message: "Usuário não encontrado" });
     }
 
     const token = user?.token;
     if (!token) {
       return res
         .status(StatusCodes.UNAUTHORIZED)
-        .json({ message: 'Token ausente' });
+        .json({ message: "Token ausente" });
     }
 
     const { payload } = await jose.jwtVerify(
       token,
-      new TextEncoder().encode(process.env.API_TOKEN),
+      new TextEncoder().encode(process.env.API_TOKEN)
     );
     const userId = (payload as { userId: string }).userId;
 
@@ -42,6 +39,6 @@ export const tokenMid = async (
     next(); // Passa para o próximo middleware ou rota
   } catch (error) {
     // Lida com erros de verificação do token (expiração, assinatura inválida, etc.)
-    res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Token inválido' });
+    res.status(StatusCodes.UNAUTHORIZED).json({ message: "Token inválido" });
   }
 };
