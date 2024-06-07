@@ -5,6 +5,7 @@ import { login } from '@/controllers/auth/login';
 import { logout } from '@/controllers/auth/logout';
 import { me } from '@/controllers/auth/me';
 import { createAccount } from '@/controllers/auth/createAccount';
+import { isSelf } from '@/middlewares/isSelf';
 
 const authRouter = express.Router();
 
@@ -18,7 +19,7 @@ authRouter.route('/signin').post(
 
 authRouter.route('/signout').get(logout);
 
-authRouter.route('/@me').get(isAdmin, me);
+authRouter.route('/@me').get(isAdmin, isSelf, me);
 
 authRouter.route('/signup').post(createAccount);
 

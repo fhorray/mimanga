@@ -27,14 +27,17 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@types/passport-discord": "^0.1.13",
     "bcryptjs": "^2.4.3",
     "connect-pg-simple": "^9.0.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.31.1",
+    "drizzle-zod": "^0.5.1",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "jose": "^5.4.0",
     "passport": "^0.7.0",
+    "passport-discord": "^0.1.4",
     "passport-http-bearer": "^1.0.1",
     "passport-local": "^1.0.0",
     "pg": "^8.11.5",

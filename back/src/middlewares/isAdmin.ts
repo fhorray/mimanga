@@ -1,31 +1,30 @@
-import type { NextFunction, Response } from "express";
-import { StatusCodes } from "http-status-codes";
-import type { CustomRequestData } from "@/types/types";
-import { userServices } from "@/services/userServices";
+import type { NextFunction, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import type { CustomRequestData } from '@/types/types';
+import { userServices } from '@/services/userServices';
 
 export const isAdmin = async (
   req: CustomRequestData,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     if (!req.isAuthenticated())
       return res
         .status(StatusCodes.UNAUTHORIZED)
-        .json({ message: "PLEASE LOGIN FIRST" });
+        .json({ message: 'PLEASE LOGIN FIRST' });
 
     const id = req.session.passport?.user;
     const user = await userServices.findUserById(id);
 
-    if (!user || user.role !== "admin") {
+    if (!user || user.role !== 'admin') {
       res
         .status(StatusCodes.UNAUTHORIZED)
-        .json({ message: "UNAUTHORIZED/NOT ADMIN" });
+        .json({ message: 'UNAUTHORIZED/NOT ADMIN' });
     }
 
-    console.log(`Welcome, ${user?.name}`);
     next();
   } catch (error) {
-    res.status(StatusCodes.BAD_REQUEST).json({ message: "BAD REQUEST" });
+    res.status(StatusCodes.BAD_REQUEST).json({ message: 'BAD REQUEST' });
   }
 };

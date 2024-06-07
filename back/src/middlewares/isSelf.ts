@@ -26,7 +26,7 @@ export const isSelf = async (
     if (userId !== id) {
       return res
         .status(StatusCodes.UNAUTHORIZED)
-        .json({ message: 'UNAUTHORIZED 1' });
+        .json({ message: 'UNAUTHORIZED' });
     }
 
     next();

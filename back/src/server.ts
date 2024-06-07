@@ -13,6 +13,7 @@ import passport from 'passport';
 import '@/strategies/apitoken';
 import '@/strategies/local';
 import '@/strategies/bearer';
+import '@/strategies/discord';
 
 // APP INIT
 const app = express();
@@ -27,6 +28,16 @@ app.use(passport.session());
 app.use('/api/v1/mangas', mangasRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', usersRouter);
+
+// DISCORD TESTS
+app.get('/api/auth/discord', passport.authenticate('discord'));
+app.get(
+  '/api/auth/discord/redirect',
+  passport.authenticate('discord'),
+  (req, res) => {
+    res.send('DISCORD DONE');
+  },
+);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log(`Server is running on http://localhost:${process.env.PORT}`);

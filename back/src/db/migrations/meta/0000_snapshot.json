@@ -1,5 +1,5 @@
 {
-  "id": "accdbd2f-e304-407f-acdc-19b2e30cd24c",
+  "id": "55d3639b-42a4-4dc3-b420-734191e1b0ca",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -190,7 +190,7 @@
           "name": "password",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "roles": {
           "name": "roles",
@@ -206,6 +206,33 @@
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "discord_id": {
+          "name": "discord_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "providers": {
+          "name": "providers",
+          "type": "providers",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'local'"
+        },
+        "token": {
+          "name": "token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -328,6 +355,15 @@
         "Cyberpunk",
         "Steampunk",
         "Space Opera"
+      ]
+    },
+    "public.providers": {
+      "name": "providers",
+      "schema": "public",
+      "values": [
+        "discord",
+        "local",
+        "google"
       ]
     },
     "public.roles": {

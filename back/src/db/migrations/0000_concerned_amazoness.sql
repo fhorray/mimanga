@@ -11,6 +11,12 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ CREATE TYPE "public"."providers" AS ENUM('discord', 'local', 'google');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  CREATE TYPE "public"."roles" AS ENUM('admin', 'user');
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -51,9 +57,13 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"name" text NOT NULL,
 	"username" text,
 	"email" text NOT NULL,
-	"password" text NOT NULL,
+	"password" text,
 	"roles" "roles" DEFAULT 'user' NOT NULL,
 	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp DEFAULT now(),
+	"discord_id" text,
+	"providers" "providers" DEFAULT 'local',
+	"token" text,
 	CONSTRAINT "users_username_unique" UNIQUE("username"),
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
