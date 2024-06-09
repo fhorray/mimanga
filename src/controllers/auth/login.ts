@@ -37,7 +37,7 @@ export const login = async (req: CustomRequestData, res: Response) => {
 
     res.status(StatusCodes.OK).json({
       authenticated: true,
-      user: { id: user?.id, user: user },
+      user,
     });
   } catch (error) {
     console.error("Error logging in: ", error);
