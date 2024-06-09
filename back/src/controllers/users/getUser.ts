@@ -1,8 +1,8 @@
-import { db } from '@/db/config';
+import { db } from "@/db/config";
 
-import type { Request, Response } from 'express';
+import type { Request, Response } from "express";
 
-import { StatusCodes } from 'http-status-codes';
+import { StatusCodes } from "http-status-codes";
 
 // GET USER BY ID
 export const getUser = async (req: Request, res: Response) => {
@@ -18,5 +18,5 @@ export const getUser = async (req: Request, res: Response) => {
     where: (users, { eq }) => eq(users.id, id),
   });
 
-  res.status(StatusCodes.OK).json(user);
+  res.status(StatusCodes.OK).json({ status: "ok", user });
 };

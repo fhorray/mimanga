@@ -1,44 +1,38 @@
-import type { CustomRequestData } from '@/types/types';
+import type { CustomRequestData } from "@/types/types";
 
-import type { NextFunction, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
+import type { NextFunction, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 
-import { userServices } from '@/services/userServices';
+import { userServices } from "@/services/userServices";
 
 export const isAdminOrSelf = async (
   req: CustomRequestData,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
-    // get the id comming from /:id & find the user.
-    const id = req.params.id ?? req.session.passport?.user;
-    const user = await userServices.findUserById(id as string);
+    // logged user info
+    const loggedUser = req.user;
 
-    // get the id from loged user & find the user.
-    const loggedUserId = req.session.passport?.user;
-    const loggedUser = await userServices.findUserById(loggedUserId as string);
-
-    console.log('\nID: ', id, '\nLOGED: ', loggedUserId);
-
-    // verify if the user param ID is equal to the logged user ID
-    if (!user || !loggedUser)
-      return res
+    if (!req.isAuthenticated()) {
+      res
         .status(StatusCodes.UNAUTHORIZED)
-        .json({ message: 'UNAUTHORIZED: PLEASE LOGIN FIRST' });
+        .json({ message: "PLEASE LOGIN FIRST" });
+    }
 
-    // verify if the user is admin or self, if one of this conditions is TRUE
-    const isSelf = user.id !== loggedUser.id;
-    const isAdmin = loggedUser.role !== 'admin';
+    const requestedUserId = req.params.id || loggedUser?.id;
 
-    if (isAdmin && isSelf) {
-      res.status(StatusCodes.UNAUTHORIZED).json({
-        message: 'FORBIDDEN: You are not authorized to access this resource',
+    const isAdmin = loggedUser?.role === "admin";
+    const isSelf = loggedUser?.id === requestedUserId;
+
+    if (isAdmin === false && isSelf === false) {
+      res.status(StatusCodes.FORBIDDEN).json({
+        message: "FORBIDDEN: You are not authorized to access this resource",
       });
     }
 
     next();
   } catch (error) {
-    res.status(StatusCodes.UNAUTHORIZED).json({ message: 'UNAUTHORIZED' });
+    res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED 1" });
   }
 };

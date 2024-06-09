@@ -1,12 +1,12 @@
-import { getAllUsers } from '@/controllers/users/getAllUsers';
-import { db } from '@/db/config';
-import { users, users as usersTable, type InsertUser } from '@/db/schemas';
-import { refineInsertUserSchema } from '@/db/validations/users';
-import { userServices } from '@/services/userServices';
-import passport from 'passport';
-import { Strategy as DiscordStrategy } from 'passport-discord';
+import { getAllUsers } from "@/controllers/users/getAllUsers";
+import { db } from "@/db/config";
+import { users, users as usersTable, type InsertUser } from "@/db/schemas";
+import { refineInsertUserSchema } from "@/db/validations/users";
+import { userServices } from "@/services/userServices";
+import passport from "passport";
+import { Strategy as DiscordStrategy } from "passport-discord";
 
-const scopes = ['identify', 'email'];
+const scopes = ["identify", "email"];
 
 passport.use(
   new DiscordStrategy(
@@ -19,7 +19,7 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         if (!profile) {
-          done({ message: 'erro no profile' }, false);
+          done({ message: "erro no profile" }, false);
           return;
         }
         const { id, global_name, username, email } = profile;
@@ -28,17 +28,17 @@ passport.use(
         const findUser = users.filter((user) => user.email === email)[0];
 
         if (!findUser) {
-          console.log('Usuario não existe,criar conta ele');
+          console.log("Usuario não existe, criar conta.");
 
           const newUser: InsertUser = {
-            name: global_name ?? 'user 2',
+            name: global_name as string,
             username: username,
             email: email as string,
             password: null,
             createdAt: new Date(),
             updatedAt: new Date(),
             discordId: id,
-            provider: 'discord',
+            provider: "discord",
           };
 
           refineInsertUserSchema.parse(newUser);
@@ -50,7 +50,7 @@ passport.use(
           done(null, newUserData[0]);
         } else {
           done(null, findUser);
-          console.log('Usuario ja existe, logar ele');
+          console.log("Usuario ja existe, logar ele");
         }
 
         // done(null, newUserData[0]);
@@ -60,6 +60,6 @@ passport.use(
       } catch (error) {
         done(error);
       }
-    },
-  ),
+    }
+  )
 );

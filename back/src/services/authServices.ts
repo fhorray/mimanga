@@ -1,11 +1,11 @@
-import { db } from '@/db/config';
-import { users, users as usersTable, type SelectUser } from '@/db/schemas';
-import { sql } from 'drizzle-orm';
+import { db } from "@/db/config";
+import { users, users as usersTable, type SelectUser } from "@/db/schemas";
+import { sql } from "drizzle-orm";
 
-import type { Request, Response } from 'express';
+import type { Request, Response } from "express";
 
-import { createUsername } from '@/utils/createUsername';
-import { hashPassword } from '@/utils/hashPassword';
+import { createUsername } from "@/utils/createUsername";
+import { hashPassword } from "@/utils/hashPassword";
 
 const createUser = async (req: Request, res: Response) => {
   try {
@@ -13,7 +13,7 @@ const createUser = async (req: Request, res: Response) => {
     const newUserData: SelectUser = req.body;
 
     // hash the password
-    const hashedPassword = await hashPassword(res, newUserData);
+    const hashedPassword = await hashPassword(newUserData);
 
     // creation of the username
     await createUsername(newUserData, users);
@@ -30,7 +30,7 @@ const createUser = async (req: Request, res: Response) => {
         id: usersTable.id,
         name: usersTable.name,
         email: usersTable.email,
-        password: sql<string>`'********'`.as('usersTable.password'),
+        password: sql<string>`'********'`.as("usersTable.password"),
         username: usersTable.username,
         role: usersTable.role,
         discordId: usersTable.discordId,
@@ -40,9 +40,9 @@ const createUser = async (req: Request, res: Response) => {
       });
   } catch (error) {
     const typedError = error as Error;
-    console.error('An error occurred while inserting data:', typedError);
+    console.error("An error occurred while inserting data:", typedError);
     throw new Error(
-      'An error occurred while inserting data: ' + typedError.message,
+      "An error occurred while inserting data: " + typedError.message
     );
   }
 };
