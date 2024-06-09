@@ -9,13 +9,7 @@ import { isAdminOrSelf } from "@/middlewares/isAdminOrSelf";
 
 const authRouter = express.Router();
 
-authRouter.route("/signin").post(
-  passport.authenticate("local", {
-    successRedirect: "/api/v1/users/@me",
-    failureRedirect: "/api/v1/auth/signin",
-  }),
-  login
-);
+authRouter.route("/signin").post(passport.authenticate("local"), login);
 
 // DISCORD strategie
 authRouter.get("/discord", passport.authenticate("discord"));

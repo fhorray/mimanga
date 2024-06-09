@@ -1,27 +1,29 @@
-import { db } from '@/db/config';
-import { users } from '@/db/schemas';
-import { userServices } from '@/services/userServices';
-import type { CustomRequestData } from '@/types/types';
-import { eq } from 'drizzle-orm';
-import type { Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
-import * as jose from 'jose';
+import { db } from "@/db/config";
+import { users } from "@/db/schemas";
+import { userServices } from "@/services/userServices";
+import type { CustomRequestData } from "@/types/types";
+import { eq } from "drizzle-orm";
+import type { Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
+import * as jose from "jose";
 
 // LOGIN
 export const login = async (req: CustomRequestData, res: Response) => {
   try {
     const id = req.session.passport?.user;
+    console.log(req.session);
+
     if (!id) {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ message: 'User ID not found in session' });
+        .json({ message: "User ID not found in session" });
     }
 
     const user = await userServices.findUserById(id);
     if (!user) {
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Internal server error' });
+        .json({ message: "Internal server error" });
     }
 
     // TODO: configure JWT if needed, now this only assign a JWT inside the user's 'token' column
@@ -33,11 +35,14 @@ export const login = async (req: CustomRequestData, res: Response) => {
 
     // await db.update(users).set({ token: jwt }).where(eq(users.id, id));
 
-    res.status(StatusCodes.OK).json({ message: `Welcome ${user?.username}!` });
+    res.status(StatusCodes.OK).json({
+      authenticated: true,
+      user: { id: user?.id, user: user },
+    });
   } catch (error) {
-    console.error('Error logging in: ', error);
+    console.error("Error logging in: ", error);
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: 'Error logging in' });
+      .json({ error: "Error logging in" });
   }
 };
