@@ -1,4 +1,4 @@
-import { getMe } from "@/controllers/mangas/getMe";
+import { getMe } from "@/controllers/users/getMe";
 import { deleteUser } from "@/controllers/users/deleteUser";
 import { getAllUsers } from "@/controllers/users/getAllUsers";
 import { getUser } from "@/controllers/users/getUser";

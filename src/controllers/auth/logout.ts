@@ -1,15 +1,26 @@
-import type { Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
+import { db } from "@/db/config";
+import { sessions } from "@/db/schemas";
+import { eq } from "drizzle-orm";
+import type { Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 
 // LOGOUT
 export const logout = async (req: Request, res: Response) => {
-  req.logout((err) => {
+  req.session.destroy(async (err) => {
     if (err) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
-    } else {
-      res.status(StatusCodes.OK).send('Logged out');
+      console.error("Error destroying session: ", err);
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ error: "Internal server error" });
     }
-  });
 
-  res.send('Logged out');
+    await db.delete(sessions).where(eq(sessions.sid, req.sessionID));
+    res.clearCookie("connect.sid");
+
+    req.logout(() => {
+      res.status(StatusCodes.OK).json({ message: "logged out" });
+    });
+
+    res.status(StatusCodes.OK).json({ message: "logged out" });
+  });
 };

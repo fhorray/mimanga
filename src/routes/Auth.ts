@@ -21,7 +21,7 @@ authRouter.get(
   })
 );
 
-authRouter.route("/signout").get(logout);
+authRouter.route("/signout").post(logout);
 
 authRouter.route("/signup").post(createAccount);
 

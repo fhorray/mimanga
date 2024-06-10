@@ -9,6 +9,7 @@ import { validatePassword } from "@/utils/validatePassword";
 passport.use(
   new LocalStrategy(
     { usernameField: "email" },
+
     // VERIFY CALLBACK: This is the function that will be called to verify the user
     async (email, password, done) => {
       try {
@@ -20,6 +21,7 @@ passport.use(
 
         // USE Bcrypt to validate the password
         const isValid = await validatePassword(user[0], password);
+
         if (!isValid) {
           console.log("Senha inválida");
           return done(null, false, { message: "Senha inválida" });
@@ -35,7 +37,7 @@ passport.use(
 
 // These functions are used to store the user in the session
 passport.serializeUser((user, done) => {
-  done(null, user.id); // Armazene o ID do usuário na sessão
+  done(null, user.id);
 });
 
 passport.deserializeUser(async (id: string, done) => {

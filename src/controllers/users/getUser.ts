@@ -14,6 +14,7 @@ export const getUser = async (req: Request, res: Response) => {
       email: true,
       username: true,
       role: true,
+      password: false,
     },
     where: (users, { eq }) => eq(users.id, id),
   });
